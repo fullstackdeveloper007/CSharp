@@ -1,16 +1,18 @@
 //1. Running in parallel
-
-  var employeesTask = Task.Run(GetEmployeeList); 
-  var taskSkill = Task.Run(GetEmployeSkills); 
-  var tasknotes = Task.Run(GetEmployeeNotes); 
+public async void RunTask()
+{
+    var employeesTask = Task.Run(GetEmployeeList); 
+    var taskSkill = Task.Run(GetEmployeSkills); 
+    var tasknotes = Task.Run(GetEmployeeNotes); 
   
-  await Task.WhenAll(employeesTask, taskSkill, tasknotes);
+    await Task.WhenAll(employeesTask, taskSkill, tasknotes);
  
-  var emp = employeesTask.Result;
-  var sk = taskSkill.Result;
-  var nt = tasknotes.Result;
+    var emp = employeesTask.Result;
+    var sk = taskSkill.Result;
+    var nt = tasknotes.Result;  
+  }
   
-  /* Calling Methods */  
+  /*  Methods */  
   List<Employee> GetEmployeeList(){
     //Demo purpose
     return empList;
@@ -26,7 +28,26 @@
     return notes;
   }
   
-  2. Other way of calling in parallel 
+  2.  Task in without async method 
+  public void RunTask()
+  {
+     var task1= Task.Run(() => GetEmployeeList(param));
+     var task2 = Task.Run(() => GetEmployeSkills(param));
+     
+     Task.WhenAll(task1, task2).Wait();
+
+    DataSet  ds = task1.Result;
+    DataSet ds1= task2.Result;
+  }
+   
+ public async Task<DataSet> GetEmployeeList(parameter para) 
+ {
+   //DB connection and get data 
+   return ds;
+ }            
+                
+                
+  3. Other way of calling in parallel 
   
    Task<DataSet> t1 = GetDataset(connection);
    Task<DataSet> t2 = GetDataset(connection);
